@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>深入：微任务与JavaScript 运行时环境 | began个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript 执行上下文当一段 JavaScipt 代码在运行的时候，它实际上运行在执行上下文中。下面3种类型会创建一个新的执行上下文：  全局上线爱问是为运行代码主体而创建的执行上下文，也就是说它是为那些存在于JavaScript 函数之外的任何代码而创建的。 每个函数会在执行的时候创建自己的执行上下文。这个上下文就是通常说的“本地上下文”。 使用 eval() 函数也会创建一个新的执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入：微任务与JavaScript 运行时环境">
+<meta property="og:url" content="http://example.com/2022/01/14/event-loop/index.html">
+<meta property="og:site_name" content="began个人博客">
+<meta property="og:description" content="JavaScript 执行上下文当一段 JavaScipt 代码在运行的时候，它实际上运行在执行上下文中。下面3种类型会创建一个新的执行上下文：  全局上线爱问是为运行代码主体而创建的执行上下文，也就是说它是为那些存在于JavaScript 函数之外的任何代码而创建的。 每个函数会在执行的时候创建自己的执行上下文。这个上下文就是通常说的“本地上下文”。 使用 eval() 函数也会创建一个新的执行">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-14T08:23:37.000Z">
+<meta property="article:modified_time" content="2022-01-17T04:18:30.128Z">
+<meta property="article:author" content="zzw">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="began个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">began个人博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-event-loop" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/14/event-loop/" class="article-date">
+  <time datetime="2022-01-14T08:23:37.000Z" itemprop="datePublished">2022-01-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深入：微任务与JavaScript 运行时环境
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="JavaScript-执行上下文"><a href="#JavaScript-执行上下文" class="headerlink" title="JavaScript 执行上下文"></a>JavaScript 执行上下文</h1><p>当一段 JavaScipt 代码在运行的时候，它实际上运行在执行上下文中。下面3种类型会创建一个新的执行上下文：</p>
+<ul>
+<li>全局上线爱问是为运行代码主体而创建的执行上下文，也就是说它是为那些存在于JavaScript 函数之外的任何代码而创建的。</li>
+<li>每个函数会在执行的时候创建自己的执行上下文。这个上下文就是通常说的“本地上下文”。</li>
+<li>使用 eval() 函数也会创建一个新的执行上下文。</li>
+</ul>
+<p>每一个上下文的本质上都是一种作用域层级。每个代码段开始执行的时候都会创建一个新的上下文来运行它，并且在代码退出的时候销毁掉。</p>
+<h1 id="游览器中的事件循环"><a href="#游览器中的事件循环" class="headerlink" title="游览器中的事件循环"></a>游览器中的事件循环</h1><p>每个代理都是由事件循环驱动的，事件循环负责收集用事件（包含用户事件以及其他非用户事件等）、对任务进行排队以便在合适的时候执行回调。然后它执行所有处于等待中的 JavaScript 任务（宏任务） ，然后是 微任务，然后在开始下一次循环之前执行一些必要的渲染和绘制操作。</p>
+<p>网页或者app 的代码和游览器本身的用户界面程序运行在相同的线程中，共享相同的事件循环。该线程就是主线程，它除了运行网页本身的代码之外，还负责收集和派发用户和其他事件，以及渲染和绘制网页内容等。</p>
+<p>然后，事件循环会驱动发生在游览器中与用户交互有关的一切，但在这里，对我们来说更重要的是需要了解它是如何负责调度和执行在其线程中执行的每段代码的。</p>
+<h3 id="Window-事件循环"><a href="#Window-事件循环" class="headerlink" title="Window 事件循环"></a><strong>Window 事件循环</strong></h3><p>  window 事件循环驱动所有同源的窗口</p>
+<h3 id="Worker-事件循环"><a href="#Worker-事件循环" class="headerlink" title="Worker 事件循环"></a><strong>Worker 事件循环</strong></h3><p>  worker事件循环顾名思义就是驱动 worker 的事件循环。这包括了所有种类的 worker；最基本的 web worker 以及 shared worker 和 service worker。 Worler 被放在一个或多个独立于“主代码”的代理中。游览器可能会用单个或多个事件循环来处理给定类型的所有 worker。</p>
+<h3 id="Worklet-事件循环"><a href="#Worklet-事件循环" class="headerlink" title="Worklet 事件循环"></a><strong>Worklet 事件循环</strong></h3><p>  worklet 事件循环用于驱动运行 worklet 的代理。这包含了 Worklet 、 AudioWorklet 以及 PaintWorklet</p>
+<h2 id="（宏任务）-任务-VS-微任务"><a href="#（宏任务）-任务-VS-微任务" class="headerlink" title="（宏任务） 任务 VS 微任务"></a>（宏任务） 任务 VS 微任务</h2><p>一个（宏任务）任务就是指计划由标准机制来执行的任何 javascript， 如程序的初始化、事件触发的回调等。<br>例如： setTimeout 或者 setInterval() 来添加任务</p>
+<p>任务队列和微任务队列的区分很简单，但却很重要：</p>
+<ul>
+<li>当执行来自任务队列中的任务时，在每一次新的事件循环开始迭代的时候运行时都会执行队列中的每个任务。在每次迭代开始之后加入到队列中的任务需要在下一次迭代开始之后才会被执行。</li>
+<li>每次当一个任务退出且执行上下文为空的时候，微任务队列中的每一个微任务会依次被执行。不同的是它会等到微任务队列为空才会停止执行—即使中途有微任务加入。换句话说，微任务可以添加新的微任务到队列中，并在下一个任务开始执行之前且当前事件循环结束之前执行完所有的微任务。</li>
+</ul>
+<p>macro-task 大概包括：</p>
+<ul>
+<li>script （整体代码）</li>
+<li>setTimeout</li>
+<li>setInterval</li>
+<li>setImmediate</li>
+<li>I/O</li>
+<li>UI rendermicro-task 大概包括：<ul>
+<li>process.nextTick</li>
+<li>Promise</li>
+<li>Async/Await （实际就是 promise）</li>
+<li>MutationObserver （html5 新特性）</li>
+</ul>
+</li>
+</ul>
+<p>整体执行</p>
+<p>&lt;%- image_tag(‘./../../public/css/images/el1.png’, [options]) %&gt;</p>
+<p>总的结论就是,</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/01/14/event-loop/" data-id="ckye5egju0000ekt67gyg0gvw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/01/17/flex/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Flex 布局是什么？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/01/14/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/01/17/flex/">Flex 布局是什么？</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/14/event-loop/">深入：微任务与JavaScript 运行时环境</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/14/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 zzw<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

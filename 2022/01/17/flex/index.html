@@ -5,15 +5,17 @@
   
 
   
-  <title>began个人博客</title>
+  <title>Flex 布局是什么？ | began个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="学习笔记">
-<meta property="og:type" content="website">
-<meta property="og:title" content="began个人博客">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="Flexible Box 模型， 通常被称为 flexbox ，是一种一维的布局模型。它给 flexbox 的子元素之间提供了强大的空间分布和对齐能力。 我们说 flexbox 是一种一维的布局，是因为一个 flexbox 一次只能处理一个维度上的元素布局，一行或者一列。作为对比的是另一个二维布局 CSS Grid Layout， 可以同时处理行和列上的布局 flexbox 的两个轴线当使用 fl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flex 布局是什么？">
+<meta property="og:url" content="http://example.com/2022/01/17/flex/index.html">
 <meta property="og:site_name" content="began个人博客">
-<meta property="og:description" content="学习笔记">
+<meta property="og:description" content="Flexible Box 模型， 通常被称为 flexbox ，是一种一维的布局模型。它给 flexbox 的子元素之间提供了强大的空间分布和对齐能力。 我们说 flexbox 是一种一维的布局，是因为一个 flexbox 一次只能处理一个维度上的元素布局，一行或者一列。作为对比的是另一个二维布局 CSS Grid Layout， 可以同时处理行和列上的布局 flexbox 的两个轴线当使用 fl">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-17T02:28:43.000Z">
+<meta property="article:modified_time" content="2022-01-17T08:00:46.376Z">
 <meta property="article:author" content="zzw">
 <meta property="article:tag" content="笔记">
 <meta name="twitter:card" content="summary">
@@ -65,9 +67,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-flex" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-flex" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2022/01/17/flex/" class="article-date">
   <time datetime="2022-01-17T02:28:43.000Z" itemprop="datePublished">2022-01-17</time>
@@ -80,8 +80,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/01/17/flex/">Flex 布局是什么？</a>
+    <h1 class="article-title" itemprop="name">
+      Flex 布局是什么？
     </h1>
   
 
@@ -156,133 +156,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-event-loop" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2022/01/14/event-loop/" class="article-date">
-  <time datetime="2022-01-14T08:23:37.000Z" itemprop="datePublished">2022-01-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/01/14/event-loop/">深入：微任务与JavaScript 运行时环境</a>
-    </h1>
+    <a href="/2022/01/14/event-loop/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深入：微任务与JavaScript 运行时环境</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="JavaScript-执行上下文"><a href="#JavaScript-执行上下文" class="headerlink" title="JavaScript 执行上下文"></a>JavaScript 执行上下文</h1><p>当一段 JavaScipt 代码在运行的时候，它实际上运行在执行上下文中。下面3种类型会创建一个新的执行上下文：</p>
-<ul>
-<li>全局上线爱问是为运行代码主体而创建的执行上下文，也就是说它是为那些存在于JavaScript 函数之外的任何代码而创建的。</li>
-<li>每个函数会在执行的时候创建自己的执行上下文。这个上下文就是通常说的“本地上下文”。</li>
-<li>使用 eval() 函数也会创建一个新的执行上下文。</li>
-</ul>
-<p>每一个上下文的本质上都是一种作用域层级。每个代码段开始执行的时候都会创建一个新的上下文来运行它，并且在代码退出的时候销毁掉。</p>
-<h1 id="游览器中的事件循环"><a href="#游览器中的事件循环" class="headerlink" title="游览器中的事件循环"></a>游览器中的事件循环</h1><p>每个代理都是由事件循环驱动的，事件循环负责收集用事件（包含用户事件以及其他非用户事件等）、对任务进行排队以便在合适的时候执行回调。然后它执行所有处于等待中的 JavaScript 任务（宏任务） ，然后是 微任务，然后在开始下一次循环之前执行一些必要的渲染和绘制操作。</p>
-<p>网页或者app 的代码和游览器本身的用户界面程序运行在相同的线程中，共享相同的事件循环。该线程就是主线程，它除了运行网页本身的代码之外，还负责收集和派发用户和其他事件，以及渲染和绘制网页内容等。</p>
-<p>然后，事件循环会驱动发生在游览器中与用户交互有关的一切，但在这里，对我们来说更重要的是需要了解它是如何负责调度和执行在其线程中执行的每段代码的。</p>
-<h3 id="Window-事件循环"><a href="#Window-事件循环" class="headerlink" title="Window 事件循环"></a><strong>Window 事件循环</strong></h3><p>  window 事件循环驱动所有同源的窗口</p>
-<h3 id="Worker-事件循环"><a href="#Worker-事件循环" class="headerlink" title="Worker 事件循环"></a><strong>Worker 事件循环</strong></h3><p>  worker事件循环顾名思义就是驱动 worker 的事件循环。这包括了所有种类的 worker；最基本的 web worker 以及 shared worker 和 service worker。 Worler 被放在一个或多个独立于“主代码”的代理中。游览器可能会用单个或多个事件循环来处理给定类型的所有 worker。</p>
-<h3 id="Worklet-事件循环"><a href="#Worklet-事件循环" class="headerlink" title="Worklet 事件循环"></a><strong>Worklet 事件循环</strong></h3><p>  worklet 事件循环用于驱动运行 worklet 的代理。这包含了 Worklet 、 AudioWorklet 以及 PaintWorklet</p>
-<h2 id="（宏任务）-任务-VS-微任务"><a href="#（宏任务）-任务-VS-微任务" class="headerlink" title="（宏任务） 任务 VS 微任务"></a>（宏任务） 任务 VS 微任务</h2><p>一个（宏任务）任务就是指计划由标准机制来执行的任何 javascript， 如程序的初始化、事件触发的回调等。<br>例如： setTimeout 或者 setInterval() 来添加任务</p>
-<p>任务队列和微任务队列的区分很简单，但却很重要：</p>
-<ul>
-<li>当执行来自任务队列中的任务时，在每一次新的事件循环开始迭代的时候运行时都会执行队列中的每个任务。在每次迭代开始之后加入到队列中的任务需要在下一次迭代开始之后才会被执行。</li>
-<li>每次当一个任务退出且执行上下文为空的时候，微任务队列中的每一个微任务会依次被执行。不同的是它会等到微任务队列为空才会停止执行—即使中途有微任务加入。换句话说，微任务可以添加新的微任务到队列中，并在下一个任务开始执行之前且当前事件循环结束之前执行完所有的微任务。</li>
-</ul>
-<p>macro-task 大概包括：</p>
-<ul>
-<li>script （整体代码）</li>
-<li>setTimeout</li>
-<li>setInterval</li>
-<li>setImmediate</li>
-<li>I/O</li>
-<li>UI rendermicro-task 大概包括：<ul>
-<li>process.nextTick</li>
-<li>Promise</li>
-<li>Async/Await （实际就是 promise）</li>
-<li>MutationObserver （html5 新特性）</li>
-</ul>
-</li>
-</ul>
-<p>整体执行</p>
-<p>&lt;%- image_tag(‘./../../public/css/images/el1.png’, [options]) %&gt;</p>
-<p>总的结论就是,</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/14/event-loop/" data-id="ckye5egju0000ekt67gyg0gvw" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2022/01/14/hello-world/" class="article-date">
-  <time datetime="2022-01-14T07:40:12.636Z" itemprop="datePublished">2022-01-14</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/01/14/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/14/hello-world/" data-id="ckye4d3wl0000qwt68xks5o4m" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
