@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>typescript-day01 | began个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基础类型布尔值最基本的数据类型就是简单的 true&#x2F;false  1let isDone: boolean &#x3D; false;  数字和javaScript一样，TypeScript 里所有的数字都是浮点数。这些浮点数的类型是 number。 除了支持十进制和十六进制字面量， TypeScript 还支持 ECMAScript 2015中引入的二进制和八进制字面量。 1234let a: numbe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="typescript-day01">
+<meta property="og:url" content="http://example.com/2022/01/18/typescript-day01/index.html">
+<meta property="og:site_name" content="began个人博客">
+<meta property="og:description" content="基础类型布尔值最基本的数据类型就是简单的 true&#x2F;false  1let isDone: boolean &#x3D; false;  数字和javaScript一样，TypeScript 里所有的数字都是浮点数。这些浮点数的类型是 number。 除了支持十进制和十六进制字面量， TypeScript 还支持 ECMAScript 2015中引入的二进制和八进制字面量。 1234let a: numbe">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-18T03:17:55.000Z">
+<meta property="article:modified_time" content="2022-01-18T06:51:11.113Z">
+<meta property="article:author" content="zzw">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="began个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">began个人博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-typescript-day01" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/18/typescript-day01/" class="article-date">
+  <time datetime="2022-01-18T03:17:55.000Z" itemprop="datePublished">2022-01-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      typescript-day01
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基础类型"><a href="#基础类型" class="headerlink" title="基础类型"></a>基础类型</h1><h2 id="布尔值"><a href="#布尔值" class="headerlink" title="布尔值"></a>布尔值</h2><p>最基本的数据类型就是简单的 true/false </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let isDone: boolean = false;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h2><p>和javaScript一样，TypeScript 里所有的数字都是浮点数。这些浮点数的类型是 <code>number</code>。 除了支持十进制和十六进制字面量， TypeScript 还支持 ECMAScript 2015中引入的二进制和八进制字面量。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let a: number = 6;</span><br><span class="line">let b: number = 0xf00d;</span><br><span class="line">let c: number = 0b1010;</span><br><span class="line">let d: number = 0o744;</span><br></pre></td></tr></table></figure>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>不仅支持双引号(<code>&quot;</code>)或单引号(<code>&#39;</code>)。还可以使用模版字符串</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let name: string = &quot;bob&quot;;</span><br><span class="line">name = &#x27;smith&#x27;</span><br><span class="line"></span><br><span class="line">let name: string = `Gene`;</span><br><span class="line">let age: number = 37;</span><br><span class="line">let sentence: string = `Hello, my name is $&#123; name &#125;.</span><br><span class="line">I&#x27;ll be $&#123;age + 1&#125; years old next month.`;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let list: number[] = [1, 2, 3];</span><br><span class="line">let list: Array&lt;number&gt; = [1, 2, 3]</span><br></pre></td></tr></table></figure>
+
+<h2 id="元组-Tuple"><a href="#元组-Tuple" class="headerlink" title="元组 Tuple"></a>元组 Tuple</h2><p>元组类型允许表示一个已知元素数量和类型的数组，各元素的类型不必相同。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">let x: [string, number];</span><br><span class="line">x = [&#x27;hello&#x27;, 10]; // ok</span><br><span class="line">x = [1, &#x27;hello&#x27;] // error</span><br><span class="line"></span><br><span class="line">当访问一个已知索引的元素，会得到正确的类型</span><br><span class="line">console.log(x[0].substr(1)); // ok</span><br><span class="line">console.log(x[1].substr(1)); // Error, &#x27;number&#x27; does not have &#x27;substr&#x27; </span><br><span class="line"></span><br><span class="line">当访问一个越界的元素，会使用联合类型替代；</span><br><span class="line">x[3] = &#x27;world&#x27;; // ok  字符串可以赋值给(string | number) 类型</span><br><span class="line">console.log(x[5].toString()); // ok &#x27;string&#x27; 和 &#x27;number&#x27; 都有 toString</span><br><span class="line">x[6] = true // error 布尔不是(string | number) 类型</span><br></pre></td></tr></table></figure>
+<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><p><code>enum</code>类型是对JavaScript 标准数据类型的一个补充。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">enum Color &#123;Red, Green, Blue&#125;</span><br><span class="line">let c: Color = Color.Green;</span><br><span class="line"></span><br><span class="line">默认情况下，从0开始为元素编号。</span><br><span class="line"></span><br><span class="line">enum Color &#123;Red = 1, Green, Blue&#125;</span><br><span class="line">let c: Color = Color.Green;</span><br><span class="line"></span><br><span class="line">或者，全部都采用手动赋值：</span><br><span class="line"></span><br><span class="line">enum Color &#123;Red = 1, Green = 2, Blue = 4&#125;</span><br><span class="line">let c: Color = Color.Green;</span><br><span class="line"></span><br><span class="line">枚举类型提供的一个便利是你可以由枚举值得到它的名字。例如，我们知道数值为2，但是不确定它映射到Color里都那个名字，我们可以查找相应的名字；</span><br><span class="line"></span><br><span class="line">enum Color &#123;Red = 1, Green, Bule&#125;</span><br><span class="line">let colorName: string = Color[2];</span><br><span class="line">console.log(colorName); // 显示&#x27;Green&#x27;因为上面代码里的值是2</span><br></pre></td></tr></table></figure>
+
+<h2 id="Any"><a href="#Any" class="headerlink" title="Any"></a>Any</h2><p>有时候，我们会想要那些在编程阶段还不清楚类型的变量指定一个类型。这些值可能来自于动态的内容，比如来自用户输入或第三方代码库。这种情况下，我们不希望类型检查器对这些值进行检查而是直接让它们通过编译阶段的检查，那么我们可以使用<code>any</code>类型来标记这些变量；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">let notSure: any = 4;</span><br><span class="line">notSure = &#x27;maybe a string instead&#x27;;</span><br><span class="line">notSure = false; // ok definitely a boolean</span><br><span class="line"></span><br><span class="line">但是不能够在它上面调用任意的方法，即使它真的有这些方法：</span><br><span class="line"></span><br><span class="line">let notSure: any = 4;</span><br><span class="line">notSure.ifItExists(); // okay, ifItExists might exist at runtime</span><br><span class="line">notSure.toFixed(); // okay, toFixed exists (but the compiler doesn&#x27;t check)</span><br><span class="line"></span><br><span class="line">let prettySure: Object = 4;</span><br><span class="line">prettySure.toFixed(); // Error: Property &#x27;toFixed&#x27; doesn&#x27;t exist on type &#x27;Object&#x27;.</span><br></pre></td></tr></table></figure>
+<p>当你只知道一部分数据的类型时，<code>any</code>类型也是有用的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let list: any[] = [1, true, &quot;free&quot;];</span><br><span class="line">list[1] = 100;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Void"><a href="#Void" class="headerlink" title="Void"></a>Void</h2><p>某种程度上说，<code>void</code>类型像是与<code>any</code>类型相反，它表示没有任何类型。当一个函数没有返回值时，你通常会见到其返回值类型是 void;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function warnUser(): void &#123;</span><br><span class="line">  console.log(&quot;This is my warning message&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>声明一个<code>void</code>类型的变量没有什么大用，因为你只能为它赋值<code>undefined</code>和<code>null</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let unusable: void = undefined;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Null-和-Undefined"><a href="#Null-和-Undefined" class="headerlink" title="Null 和 Undefined"></a>Null 和 Undefined</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let u: undefined = undefined;</span><br><span class="line">let n: null = null;</span><br></pre></td></tr></table></figure>
+<p>默认情况下<code>null</code>和<code>undefined</code>是所有类型的子类型。<br><code>--strictNullChecks</code>标记，<code>null</code>和<code>undefined</code>只能赋值给<code>void</code>和它们各自。</p>
+<h2 id="Never"><a href="#Never" class="headerlink" title="Never"></a>Never</h2><p><code>never</code>类型表示的是那些永不存在的值类型。例如，<code>never</code>类型是那些总是会抛出异常或根本就不会有返回值的函数表达式或箭头函数表达式的返回值类型；变量也可能是<code>never</code>类型，当它们永不为真的类型保护所约束时。<br><code>never</code>类型是任何类型的子类型,也可以赋值给任何类型；然而，没有类型是<code>never</code>的子类型或可以赋值给<code>never</code>类型.即使<code>any</code>也不可以赋值给<code>never</code>.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 返回的never的函数必须存在无法达到的终点</span><br><span class="line">function error (message: string): never &#123;</span><br><span class="line">  throw new Error(message)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 推断的返回类型是never</span><br><span class="line">function fail()&#123;</span><br><span class="line">  return error(&quot;Something failed);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 返回never的函数必须存在无法达到的终点</span><br><span class="line">function infiniteLoop (): never &#123;</span><br><span class="line">  while(true)&#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h2><p><code>object</code>表示非与那时类型，也就是除了number, string, boolean, symobl, nbull 或<code>undefined外的类型。 使用</code>object<code>类型，就可以更好的表示像</code>Object.create`这样的API</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">declare function create(o: object | null): void;</span><br><span class="line"></span><br><span class="line">create(&#123; prop: 0 &#125;); //ok</span><br><span class="line">create(null); //ok</span><br><span class="line"></span><br><span class="line">create(42); //Error</span><br><span class="line">create(&quot;string&quot;); // Error</span><br><span class="line">create(false); // Error</span><br><span class="line">create(undefined); // Error</span><br></pre></td></tr></table></figure>
+<h2 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h2><p>类型断言有两种形式.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let someValue: any = &quot;this is a string&quot;</span><br><span class="line"></span><br><span class="line">let strLength: number = (&lt;string&gt;someValue).length;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>另一个为<code>as</code>语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let someValue: any = &quot;this is a string&quot;</span><br><span class="line">let strLength: number = (someValue as string).length;</span><br></pre></td></tr></table></figure>
+<h2 id="关于let"><a href="#关于let" class="headerlink" title="关于let"></a>关于<code>let</code></h2><p>使用 <code>let</code>来代替<code>var</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/01/18/typescript-day01/" data-id="ckymdg9lc0000c0t62hlb3uvn" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/01/18/typescript-day02/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          typescript-day02
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/01/17/flex/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Flex 布局是什么？</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/01/18/typescript-day03/">typescript-day03</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/18/typescript-day02/">typescript-day02</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/18/typescript-day01/">typescript-day01</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/17/flex/">Flex 布局是什么？</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/14/event-loop/">深入：微任务与JavaScript 运行时环境</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 zzw<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
