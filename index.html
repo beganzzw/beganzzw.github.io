@@ -67,6 +67,288 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-nodejs-study-day1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/03/15/nodejs-study-day1/" class="article-date">
+  <time datetime="2022-03-15T02:08:48.000Z" itemprop="datePublished">2022-03-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/03/15/nodejs-study-day1/">nodejs_study_day1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="第一天"><a href="#第一天" class="headerlink" title="第一天"></a>第一天</h1><h2 id="初始创建Hello-World"><a href="#初始创建Hello-World" class="headerlink" title="初始创建Hello World"></a>初始创建Hello World</h2><p>以下<code>req</code>为<code>request</code>。<code>res</code>为<code>response</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 引入htpp模块</span><br><span class="line">var http = require(&quot;http&quot;)</span><br><span class="line">// 创建服务器 并监听3000端口</span><br><span class="line">http.createServer(function (req, res)&#123;</span><br><span class="line">  res.writeHead(200,&#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;);</span><br><span class="line">  res.write(&#x27;Hello World&#x27;);</span><br><span class="line">  res.end();</span><br><span class="line">&#125;).listen(3000)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>通过node 文件名 启动</strong>随即打开<code>localhost:3000/</code><br>页面显示<code>Hello World</code></p>
+<h2 id="简单模块化"><a href="#简单模块化" class="headerlink" title="简单模块化"></a>简单模块化</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">var http = require(&quot;http&quot;)</span><br><span class="line"></span><br><span class="line">function start () &#123;</span><br><span class="line">  function onRequest(req, res) &#123;</span><br><span class="line">    console.log(&quot;Request received&quot;)</span><br><span class="line">    res.writeHead(200,&#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;) </span><br><span class="line">    res.write(&quot;Hello World&quot;)</span><br><span class="line">    res.end()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  http.createServer(onRequest).listen(3000)</span><br><span class="line">  console.log(&quot;Server has started&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">exports.start = start</span><br></pre></td></tr></table></figure>
+<p>可以将编写的<code>server.js</code> 文件通过<code>start</code>函数进行封装。在其他模块下<br>例如: <code>index.js</code>模块中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var server = require(&#x27;./server&#x27;)</span><br><span class="line"></span><br><span class="line">server.start()</span><br></pre></td></tr></table></figure>
+<p>通过这种方式进行使用</p>
+<h2 id="简单路由"><a href="#简单路由" class="headerlink" title="简单路由"></a>简单路由</h2><p>对路由进行处理需要用到node自带模块<code>url</code>和<code>querystring</code></p>
+<p><code>http://localhost:3000/start?foo=bar&amp;hello=world</code></p>
+<p><code>url.parse(string).pathname</code>     -&gt; start</p>
+<p><code>url.parse(string).query</code>        -&gt; foo=bar&amp;hello=world</p>
+<p><code>querystring(string)[&quot;foo&quot;]</code>     -&gt; bar</p>
+<p><code>querystring(string)[&quot;hello&quot;]</code>   -&gt; world</p>
+<p>对<code>server.js</code>进行改造</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">var http = require(&quot;http&quot;)</span><br><span class="line">var url = require(&quot;url&quot;)</span><br><span class="line"></span><br><span class="line">function start (route) &#123;</span><br><span class="line">  function onRequest(req, res) &#123;</span><br><span class="line">    var pathname = url.parse(req.url).pathname</span><br><span class="line">    </span><br><span class="line">    console.log(&quot;Request for &quot; + pathname + &quot;received&quot;)</span><br><span class="line"></span><br><span class="line">    route(pathname)</span><br><span class="line">    res.writeHead(200,&#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;) </span><br><span class="line">    res.write(&quot;Hello World&quot;)</span><br><span class="line">    res.end()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  http.createServer(onRequest).listen(3000)</span><br><span class="line">  console.log(&quot;Server has started&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">exports.start = start</span><br></pre></td></tr></table></figure>
+<p>新建<code>route.js</code>文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function route(pathname)&#123;</span><br><span class="line">  console.log(&quot;About to route a request for &quot; + pathname)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.route = route</span><br></pre></td></tr></table></figure>
+<p>在<code>index.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var server = require(&#x27;./server&#x27;)</span><br><span class="line">var route = require(&#x27;./router&#x27;)</span><br><span class="line">server.start(route.route)</span><br></pre></td></tr></table></figure>
+<p>服务器端打印结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Request for /foo received</span><br><span class="line">About to route a request for /foo</span><br></pre></td></tr></table></figure>
+<p>去除了<code>favicon</code>的打印信息</p>
+<h2 id="路由的请求处理程序"><a href="#路由的请求处理程序" class="headerlink" title="路由的请求处理程序"></a>路由的请求处理程序</h2><p>新建<code>requestHandlers.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function start()&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;start&#x27; was called &quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function upload()&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;upload&#x27; was called &quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.start = start;</span><br><span class="line"></span><br><span class="line">exports.upload = upload;</span><br></pre></td></tr></table></figure>
+<p>对<code>index.js</code>进行改造</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var server = require(&#x27;./server&#x27;)</span><br><span class="line">var route = require(&#x27;./router&#x27;)</span><br><span class="line">var requestHandlers = require(&#x27;./requestHandlers&#x27;)</span><br><span class="line"></span><br><span class="line">var handle = &#123;&#125;</span><br><span class="line">handle[&quot;/&quot;] = requestHandlers.start</span><br><span class="line">handle[&quot;/start&quot;] = requestHandlers.start</span><br><span class="line">handle[&quot;/upload&quot;] = requestHandlers.upload</span><br><span class="line"></span><br><span class="line">server.start(route.route,handle)</span><br></pre></td></tr></table></figure>
+<p>对<code>server.js</code>进行改造</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">var http = require(&quot;http&quot;)</span><br><span class="line">var url = require(&quot;url&quot;)</span><br><span class="line"></span><br><span class="line">function start (route, handle) &#123;</span><br><span class="line">  function onRequest(req, res) &#123;</span><br><span class="line">    var pathname = url.parse(req.url).pathname</span><br><span class="line"></span><br><span class="line">    console.log(&quot;Request for &quot; + pathname + &quot; received&quot;)</span><br><span class="line"></span><br><span class="line">    route(handle, pathname)</span><br><span class="line">    res.writeHead(200,&#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;) </span><br><span class="line">    res.write(&quot;Hello World&quot;)</span><br><span class="line">    res.end()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  http.createServer(onRequest).listen(3000)</span><br><span class="line">  console.log(&quot;Server has started&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">exports.start = start</span><br></pre></td></tr></table></figure>
+<p>对<code>route.js</code>改造</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function route(handle,pathname)&#123;</span><br><span class="line">  console.log(&quot;About to route a request for &quot; + pathname)</span><br><span class="line">  if (typeof handle[pathname] === &#x27;function&#x27;)&#123;</span><br><span class="line">    handle[pathname]();</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    console.log(&quot;No request handler found for &quot; + pathname)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.route = route</span><br></pre></td></tr></table></figure>
+<p><strong>运行结果</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Request for /start received</span><br><span class="line">About to route a request for /start</span><br><span class="line">Request handler &#x27;start&#x27; was called</span><br></pre></td></tr></table></figure>
+<h2 id="请求处理程序作出响应"><a href="#请求处理程序作出响应" class="headerlink" title="请求处理程序作出响应"></a>请求处理程序作出响应</h2><p><code>requsetHandler.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function start()&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;start&#x27; was called &quot;)</span><br><span class="line">  return &quot;Hello Start&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function upload()&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;upload&#x27; was called &quot;)</span><br><span class="line">  return &quot;Hello Upload&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.start = start;</span><br><span class="line"></span><br><span class="line">exports.upload = upload;</span><br></pre></td></tr></table></figure>
+<p><code>route.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function route(handle,pathname)&#123;</span><br><span class="line">  console.log(&quot;About to route a request for &quot; + pathname)</span><br><span class="line">  if (typeof handle[pathname] === &#x27;function&#x27;)&#123;</span><br><span class="line">    return handle[pathname]();</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    console.log(&quot;No request handler found for &quot; + pathname)</span><br><span class="line">    return &quot;404 Not found&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.route = route</span><br></pre></td></tr></table></figure>
+<p><code>server.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">var http = require(&quot;http&quot;)</span><br><span class="line">var url = require(&quot;url&quot;)</span><br><span class="line"></span><br><span class="line">function start (route, handle) &#123;</span><br><span class="line">  function onRequest(req, res) &#123;</span><br><span class="line">    var pathname = url.parse(req.url).pathname</span><br><span class="line"></span><br><span class="line">    console.log(&quot;Request for &quot; + pathname + &quot; received&quot;)</span><br><span class="line"></span><br><span class="line">    res.writeHead(200,&#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;) </span><br><span class="line">    var content = route(handle, pathname)</span><br><span class="line">    res.write(content)</span><br><span class="line">    res.end()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  http.createServer(onRequest).listen(3000)</span><br><span class="line">  console.log(&quot;Server has started&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">exports.start = start</span><br></pre></td></tr></table></figure>
+<p>运行<code>localhost:3000/start</code>页面显示 <code>Hello Start</code></p>
+<p>运行<code>localhost:3000/upload</code>页面显示<code>Hello Upload</code></p>
+<p>运行<code>localhost:3000/foo</code>   页面显示 <code>404 Not found</code></p>
+<h2 id="阻塞行为"><a href="#阻塞行为" class="headerlink" title="阻塞行为"></a>阻塞行为</h2><p>修改<code>requestHandlers.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function start()&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;start&#x27; was called &quot;)</span><br><span class="line">  function sleep(milliSeconds) &#123;</span><br><span class="line">    var startTime = new Date().getTime();</span><br><span class="line">    while(new Date().getTime() &lt; startTime + milliSeconds);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  sleep(10000);</span><br><span class="line">  return &quot;Hello Start&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function upload()&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;upload&#x27; was called &quot;)</span><br><span class="line">  return &quot;Hello Upload&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.start = start;</span><br><span class="line"></span><br><span class="line">exports.upload = upload;</span><br></pre></td></tr></table></figure>
+<p>分别运行<code>/start</code>与<code>/upload</code>会发现两个页面差不多都运行了10s时间才返回结果。<br>可以使用<strong>事件轮询</strong>来避免.</p>
+<h3 id="非阻塞操作例子"><a href="#非阻塞操作例子" class="headerlink" title="非阻塞操作例子"></a>非阻塞操作例子</h3><p>修改<code>requestHandlers.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">var exec = require(&quot;child_process&quot;).exec</span><br><span class="line">function start()&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;start&#x27; was called &quot;)</span><br><span class="line">  var content = &quot;empty&quot;</span><br><span class="line">  </span><br><span class="line">  exec(&quot;ls -lah&quot;, function(error, stdout, stderr) &#123;</span><br><span class="line">    content = stdout;</span><br><span class="line">  &#125;)</span><br><span class="line">  return content</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function upload()&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;upload&#x27; was called &quot;)</span><br><span class="line">  return &quot;Hello Upload&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.start = start;</span><br><span class="line"></span><br><span class="line">exports.upload = upload;</span><br></pre></td></tr></table></figure>
+
+<h3 id="简单上传文件例子"><a href="#简单上传文件例子" class="headerlink" title="简单上传文件例子"></a>简单上传文件例子</h3><p>修改<code>serve.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">var http = require(&quot;http&quot;)</span><br><span class="line">var url = require(&quot;url&quot;)</span><br><span class="line"></span><br><span class="line">function start (route, handle) &#123;</span><br><span class="line">  function onRequest(request, response) &#123;</span><br><span class="line">    var postData = &quot;&quot;;</span><br><span class="line">    var pathname = url.parse(request.url).pathname</span><br><span class="line"></span><br><span class="line">    console.log(&quot;Request for &quot; + pathname + &quot; received&quot;)</span><br><span class="line"></span><br><span class="line">    route(handle,pathname, response,request)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  http.createServer(onRequest).listen(3000)</span><br><span class="line">  console.log(&quot;Server has started&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">exports.start = start</span><br></pre></td></tr></table></figure>
+<p>修改<code>requestHandlers.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">var querystring = require(&quot;querystring&quot;),</span><br><span class="line">    fs = require(&quot;fs&quot;),</span><br><span class="line">    formidable = require(&quot;formidable&quot;)</span><br><span class="line"></span><br><span class="line">function start(response)&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;start&#x27; was called.&quot;);</span><br><span class="line"></span><br><span class="line">  var body =&#x27;&lt;html&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;head&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;meta http-equiv=&quot;Content-Type&quot; &#x27;+</span><br><span class="line">    &#x27;content=&quot;text/html; charset=UTF-8&quot; /&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;/head&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;body&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;form action=&quot;/upload&quot; enctype=&quot;multipart/form-data&quot;  &#x27;+</span><br><span class="line">    &#x27;method=&quot;post&quot;&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;input type=&quot;file&quot; name=&quot;upload&quot;&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;input type=&quot;submit&quot; value=&quot;Upload file&quot; /&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;/form&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;/body&gt;&#x27;+</span><br><span class="line">    &#x27;&lt;/html&gt;&#x27;;</span><br><span class="line"></span><br><span class="line">    response.writeHead(200,&#123;&quot;Content-Type&quot;:&quot;text/html&quot;&#125;);</span><br><span class="line">    response.write(body);</span><br><span class="line">    response.end();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function upload(response, request)&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;upload&#x27; was called.&quot;);</span><br><span class="line"></span><br><span class="line">  var form =new formidable.IncomingForm();</span><br><span class="line">  form.uploadDir =&quot;./tmp&quot;</span><br><span class="line">  form.keepExtensions = true</span><br><span class="line">  console.log(&quot;about to parse&quot;);</span><br><span class="line">  form.parse(request,function(error, fields, files)&#123;</span><br><span class="line">    console.log(&quot;parsing done&quot;);</span><br><span class="line">    console.log(files.upload,&quot;files&quot;);</span><br><span class="line">    fs.renameSync(files.upload.filepath,&quot;./tmp/test.png&quot;);</span><br><span class="line">    response.writeHead(200,&#123;&quot;Content-Type&quot;:&quot;text/html&quot;&#125;);</span><br><span class="line">    response.write(&quot;received image:&lt;br/&gt;&quot;);</span><br><span class="line">    response.write(&quot;&lt;img src=&#x27;/show&#x27; /&gt;&quot;);</span><br><span class="line">    response.end();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function show(response)&#123;</span><br><span class="line">  console.log(&quot;Request handler &#x27;show&#x27; was called.&quot;);</span><br><span class="line">  fs.readFile(&quot;./tmp/test.png&quot;,&quot;binary&quot;,function(error, file)&#123;</span><br><span class="line">    if(error)&#123;</span><br><span class="line">      response.writeHead(500,&#123;&quot;Content-Type&quot;:&quot;text/plain&quot;&#125;);</span><br><span class="line">      response.write(error +&quot;\n&quot;);</span><br><span class="line">      response.end();</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">      response.writeHead(200,&#123;&quot;Content-Type&quot;:&quot;image/png&quot;&#125;);</span><br><span class="line">      response.write(file,&quot;binary&quot;);</span><br><span class="line">      response.end();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.start = start;</span><br><span class="line">exports.upload = upload;</span><br><span class="line">exports.show = show;</span><br></pre></td></tr></table></figure>
+<p>修改<code>index.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var server = require(&#x27;./server&#x27;)</span><br><span class="line">var route = require(&#x27;./router&#x27;)</span><br><span class="line">var requestHandlers = require(&#x27;./requestHandlers&#x27;)</span><br><span class="line"></span><br><span class="line">var handle = &#123;&#125;</span><br><span class="line">handle[&quot;/&quot;] = requestHandlers.start</span><br><span class="line">handle[&quot;/start&quot;] = requestHandlers.start</span><br><span class="line">handle[&quot;/upload&quot;] = requestHandlers.upload</span><br><span class="line">handle[&quot;/show&quot;] = requestHandlers.show</span><br><span class="line"></span><br><span class="line">server.start(route.route,handle)</span><br></pre></td></tr></table></figure>
+<p>修改<code>route.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function route(handle,pathname,response,request)&#123;</span><br><span class="line">  console.log(&quot;About to route a request for &quot; + pathname)</span><br><span class="line">  if (typeof handle[pathname] === &#x27;function&#x27;)&#123;</span><br><span class="line">    return handle[pathname](response, request);</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    console.log(&quot;No request handler found for &quot; + pathname)</span><br><span class="line">    response.writeHead(404,&#123;&quot;Content-Type&quot;:&quot;text/plain&quot;&#125;);</span><br><span class="line">    response.write(&#x27;404 Not Found&#x27;)</span><br><span class="line">    response.end();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">exports.route = route</span><br></pre></td></tr></table></figure>
+<p><code>Window</code>用户需在项目路径下创建<code>tmp</code>目录</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/03/15/nodejs-study-day1/" data-id="cljfboj3800058cb69c25cmle" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node/" rel="tag">node</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-interview-01" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/17/interview-01/" class="article-date">
+  <time datetime="2022-02-17T02:19:28.000Z" itemprop="datePublished">2022-02-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/17/interview-01/">interview_01</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="页面导入样式时，使用link和-import有什么区别？"><a href="#页面导入样式时，使用link和-import有什么区别？" class="headerlink" title="页面导入样式时，使用link和@import有什么区别？"></a>页面导入样式时，使用link和@import有什么区别？</h1><ul>
+<li><code>link</code>是<code>html</code>提供的标签，不仅仅可以加载样式，还可以定义其他属性。<code>@import</code>是<code>css</code>提供的语法，只可以添加样式。</li>
+<li><code>link</code>是在页面加载中时同时加载的。<code>@import</code>加载的<code>css</code>要等页面加载完毕后才加载</li>
+<li><code>link</code>没有兼容性问题，<code>@import</code>不兼容<code>ie5</code>以下。</li>
+<li><code>link</code>可以通过<code>js</code>操作<code>DOM</code>动态引入样式来改变样式,<code>@import</code>不可以</li>
+</ul>
+<h1 id="html的元素有哪些（包含H5）？"><a href="#html的元素有哪些（包含H5）？" class="headerlink" title="html的元素有哪些（包含H5）？"></a>html的元素有哪些（包含H5）？</h1><p><strong>行内元素:</strong><br>span - 字符<br>a - 超链接<br><strong>块级元素:</strong><br>head - 头部<br>title - 页面标题<br>body - 内容<br>div -<br>footer - 底部<br>h1-h6 内容标题<br>nav - 侧边栏<br>ul-li - 列表<br>ul-ol - 数字列表<br>hr - 下划线<br>p - 段落<br>form - 表单</p>
+<p><strong>空元素:</strong><br>br - 换行<br>hr - 水平线<br>img - 图片<br>input - 输入框<br>link - 外部样式表<br>meta - 页面的元信息<br>area - 图像映射<br>base - 标签为页面上的所有链接规定默认地址或默认目标<br>col - 标签为表格中一个或多个列定义属性值<br>colgroup - 标签用于对表格中的列进行组合，以便对其进行格式化。<br>command - 标记<br>embed - 定义嵌入的内容，比如插件。<br>keygen - 规定用于表单的密钥对生成器字段。<br>param - 添加对象<br>source - 媒介元素<br>track - 为诸如 video 元素之类的媒介规定外部文本轨道。<br>wbr - 在文本中的何处适合添加换行符</p>
+<h1 id="简述超链接target属性的取值和作用"><a href="#简述超链接target属性的取值和作用" class="headerlink" title="简述超链接target属性的取值和作用"></a>简述超链接target属性的取值和作用</h1><p>_blank - 在新窗口打开被链接文档<br>_self  - 在相同的框架中打开被链接文档<br>_parent - 在父框架集中打开被链接文档<br>_top - 在整个窗口中打开被链接文档<br>framename - 在指定框架中打开被链接文档</p>
+<h1 id="label都有哪些作用？并举相应的例子说明"><a href="#label都有哪些作用？并举相应的例子说明" class="headerlink" title="label都有哪些作用？并举相应的例子说明"></a>label都有哪些作用？并举相应的例子说明</h1><p>可以用来关联表单控件，通过<code>for</code>属性来关联相关元素<code>id</code>属性相同<br>当点击<code>label</code>控件时可以使游览器焦点移动到它绑定的元素上</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;form&gt;</span><br><span class="line">  &lt;label for=&quot;male&quot;&gt;male&lt;/label&gt;</span><br><span class="line">  &lt;input type=&quot;radio&quot; name=&quot;sex&quot; id=&quot;male&quot;/&gt;</span><br><span class="line">  &lt;br/&gt;</span><br><span class="line">  &lt;label for=&quot;female&quot;&gt;female&lt;/label&gt;</span><br><span class="line">  &lt;input type=&quot;radio&quot; name=&quot;sex&quot; id=&quot;female&quot;/&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="var-let-const-之间有什么区别？"><a href="#var-let-const-之间有什么区别？" class="headerlink" title="var let const 之间有什么区别？"></a>var let const 之间有什么区别？</h1><p><code>var</code>、<code>let</code>、<code>const</code>三者的区别</p>
+<ul>
+<li>变量提升</li>
+<li>暂时性死区</li>
+<li>块级作用域</li>
+<li>重复声明</li>
+<li>修改声明的变量</li>
+<li>使用</li>
+</ul>
+<h2 id="变量提升"><a href="#变量提升" class="headerlink" title="变量提升"></a>变量提升</h2><p><code>var</code>声明的变量存在变量提升，即变量可以在</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/02/17/interview-01/" data-id="cljfboj3700048cb67wzedw3n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2022web前端面试题01" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/10/2022web%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95%E9%A2%9801/" class="article-date">
+  <time datetime="2022-02-10T02:26:00.000Z" itemprop="datePublished">2022-02-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/10/2022web%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95%E9%A2%9801/">2022web前端面试题01</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="HTML面试题"><a href="#HTML面试题" class="headerlink" title="HTML面试题"></a>HTML面试题</h2><h3 id="面试题：行内元素有那些？-块级元素有那些？-空（void）元素有那些？"><a href="#面试题：行内元素有那些？-块级元素有那些？-空（void）元素有那些？" class="headerlink" title="面试题：行内元素有那些？ 块级元素有那些？ 空（void）元素有那些？"></a>面试题：行内元素有那些？ 块级元素有那些？ 空（void）元素有那些？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">行内元素： span  img input ...</span><br><span class="line">块级元素:  div  footer header section p h1 ... h6</span><br><span class="line">空元素: br  hr ...</span><br></pre></td></tr></table></figure>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ios日期转换NAN问题</span><br><span class="line">		具体就是，new Date(&#x27;2020-11-12 00:00:00&#x27;)在ios中会为NAN</span><br><span class="line">		解决方案：用new Date(&#x27;2020/11/12 00:00:00&#x27;)的日期格式，或者写个正则转换</span><br><span class="line">在移动端使用click事件有300ms延迟的问题</span><br><span class="line">	 	禁止双击缩放===》meta:user-scalabel=no</span><br><span class="line">移动端touch事件有穿透（点透）的问题，怎么解决？</span><br><span class="line">	 	4.1 阻止默认行为 : e.preventDefault();</span><br><span class="line">	 	4.2 fastclick.js</span><br><span class="line">安卓部分版本input的placeholder偏上</span><br><span class="line">		input&#123;</span><br><span class="line">	  		 line-height:normal;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="首屏优化"><a href="#首屏优化" class="headerlink" title="首屏优化"></a>首屏优化</h3><ol>
+<li>减少重绘和回流</li>
+<li>改变位置使用<code>transform</code></li>
+<li>动画尽量用<code>requestAnimationFrame</code>，不要用定时器<h3 id="cookie、localstorage、sessionstrorage之间有什么区别？"><a href="#cookie、localstorage、sessionstrorage之间有什么区别？" class="headerlink" title="cookie、localstorage、sessionstrorage之间有什么区别？"></a><code>cookie</code>、<code>localstorage</code>、<code>sessionstrorage</code>之间有什么区别？</h3></li>
+</ol>
+<ul>
+<li>与服务器交互：<ul>
+<li><code>cookie</code> 是网站为了标示用户身份而储存在用户本地终端上的数据（通常经过加密）</li>
+<li><code>cookie</code> 始终会在同源 http 请求头中携带（即使不需要），在浏览器和服务器间来回传递</li>
+<li><code>sessionStorage</code> 和 <code>localStorage</code> 不会自动把数据发给服务器，仅在本地保存</li>
+</ul>
+</li>
+<li>存储大小：<ul>
+<li><code>cookie</code> 数据根据不同浏览器限制，大小一般不能超过 4k</li>
+<li><code>sessionStorage</code> 和 <code>localStorage</code> 虽然也有存储大小的限制，但比 <code>cookie</code> 大得多，可以达到 5M 或更大</li>
+</ul>
+</li>
+<li>有期时间：<ul>
+<li><code>localStorage</code> 存储持久数据，浏览器关闭后数据不丢失除非主动删除数据</li>
+<li><code>sessionStorage</code> 数据在当前浏览器窗口关闭后自动删除</li>
+<li><code>cookie</code> 设置的 <code>cookie</code> 过期时间之前一直有效，与浏览器是否关闭无关</li>
+</ul>
+</li>
+</ul>
+<h3 id="this-的指向有那些？"><a href="#this-的指向有那些？" class="headerlink" title="this 的指向有那些？"></a>this 的指向有那些？</h3><ol>
+<li>普通函数中的 <code>this</code>指向<code>window</code></li>
+<li>定时器中的 <code>this</code> 指向 <code>window</code></li>
+<li>箭头函数没有 <code>this</code>,它的 <code>this</code> 指向取决于外部环境、</li>
+<li>事件中的 <code>this</code> 指向事件的调用者</li>
+<li> 构造函数中 <code>this</code> 和原型对象中的 <code>this</code>,都是指向构造函数 <code>new</code> 出来实例对象</li>
+<li>类 <code>class</code> 中的 <code>this</code> 指向由 <code>constructor</code> 构造器 <code>new</code> 出来的实例对象</li>
+<li>自调用函数中的 <code>this</code> 指向 <code>window</code></li>
+</ol>
+<h3 id="什么是闭包？手写一个闭包函数？闭包有那些优缺点？"><a href="#什么是闭包？手写一个闭包函数？闭包有那些优缺点？" class="headerlink" title="什么是闭包？手写一个闭包函数？闭包有那些优缺点？"></a>什么是闭包？手写一个闭包函数？闭包有那些优缺点？</h3><p>闭包（closure）指有权访问另一个函数作用域中变量的函数。简单理解就是，一个作用域可以访问另外一个函数内部的局部变量。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function fn() &#123;</span><br><span class="line">  var num = 10;</span><br><span class="line">  function fun() &#123;</span><br><span class="line">    console.log(num)</span><br><span class="line">  &#125;</span><br><span class="line">  return fun</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var f = fn()</span><br><span class="line">f()</span><br></pre></td></tr></table></figure>
+<p><strong>作用:</strong> 延长变量作用域、在函数的外部可以访问函数内部的局部变量，容易造成内层泄露，因为闭包中的局部变量永远不会被回收</p>
+<p>文章来自：<br><br><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/7060738592741523464">https://juejin.cn/post/7060738592741523464</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/7056400571967733774">https://juejin.cn/post/7056400571967733774</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/02/10/2022web%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95%E9%A2%9801/" data-id="cljfboj2z00008cb66zkbbbpw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-typescript-day04" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/21/typescript-day04/" class="article-date">
+  <time datetime="2022-01-21T01:44:47.000Z" itemprop="datePublished">2022-01-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/21/typescript-day04/">typescript-day04</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="类"><a href="#类" class="headerlink" title="类"></a>类</h1><h2 id="类-1"><a href="#类-1" class="headerlink" title="类"></a>类</h2><p>下面看一个使用类的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Greeter &#123;</span><br><span class="line">  greeting: string;</span><br><span class="line">  constructor (message: string) &#123;</span><br><span class="line">    this.greeting = message</span><br><span class="line">  &#125;</span><br><span class="line">  greet()&#123;</span><br><span class="line">    return &#x27;Hello,&#x27; + this.greeting;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let greeter = new Greeter(&#x27;world&#x27;);</span><br></pre></td></tr></table></figure>
+<p>这个类有3个成员：一个叫做<code>greeting</code>的属性，一个构造函数和一个<code>greet</code>方法。<br>你会注意到，我们在引用任何一个类成员的时候都用了<code>this</code>。它表示我们访问的是类的成员。<br>最后一行，我们使用<code>new</code>构造了<code>Greeter</code>类的一个实例。它会调用之前定义的构造函数，创建一个<code>Greeter</code>类型的新对象，并执行构造函数初始化它。</p>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">  move(distanceInMeters: number = 0) &#123;</span><br><span class="line">    conosle.log(&#x27;Animal moved $&#123;distanceInMeters&#125;m.`&#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Dog extends Animal &#123;</span><br><span class="line">  bark() &#123;</span><br><span class="line">    console.log(&#x27;Woof! Woof!&#x27;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const dog = new Dog();</span><br><span class="line">dog.bark();</span><br><span class="line">dog.move(10);</span><br><span class="line">dog.bark();</span><br></pre></td></tr></table></figure>
+<p>这个例子展示了最基本的继承；类从基类中继承了属性和方法。这里，<code>Dog</code>是一个派生类，它派生自<code>Animal</code>基类，通过<code>extends</code>关键字。派生类通常被称为子类，基类通常被称作超类。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">  name: string;</span><br><span class="line">  constructor (theName: string) &#123; this.name = thisName; &#125;</span><br><span class="line">  move(distanceInMeters: number = 0) &#123;</span><br><span class="line">    console.log(`$&#123;this.name&#125; moved $&#123;distanceInMeters&#125;m.`);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Snake extends Animal &#123;</span><br><span class="line">  constructor(name: string) &#123; super(name); &#125;</span><br><span class="line">  move(distanceInMeters = 5) &#123;</span><br><span class="line">    console.log(&#x27;Slithring...&#x27;);</span><br><span class="line">    super.move(distanceInMeters);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Horse extends Animal &#123;</span><br><span class="line">  constructor(name: string) &#123; super(name); &#125;</span><br><span class="line">  move(distanceInMeters = 45) &#123;</span><br><span class="line">    console.log(&quot;Galloping...&quot;);</span><br><span class="line">    super.move(distanceInMeters);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let sam = new Snake(&quot;Sammy the Python&quot;);</span><br><span class="line">let tom: Animal = new Horse(&quot;Tommy the Palomino&quot;);</span><br><span class="line"></span><br><span class="line">sam.move();</span><br><span class="line">tom.move(34);</span><br></pre></td></tr></table></figure>
+<p>派生类包含了一个构造函数，它必须调用<code>super()</code>，它会执行基类的构造函数。而且，在构造函数里访问<code>this</code>的属性之前，我们一定要调用<code>super()</code>。</p>
+<p>这个例子演示了如何在子类里可以重写父类的方法。<code>Snake</code>类和<code>Horse</code>类都创建了<code>move</code>方法，它们重写了从<code>Animal</code>继承类的<code>move</code>方法，使得<code>move</code>方法根据不同的类而具有不同的功能。注意，即使<code>tom</code>被声明为<code>Animal</code>类型，但因为它的值是<code>Horse</code>，调用<code>tom.move(34)</code>时，它会调用<code>Horse</code>里重写的方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Slithering...</span><br><span class="line">Sammy the Python moved 5m.</span><br><span class="line">Galloping...</span><br><span class="line">Tommy the Palomino moved 34m.</span><br></pre></td></tr></table></figure>
+<h2 id="公共，私有与受保护的修饰符"><a href="#公共，私有与受保护的修饰符" class="headerlink" title="公共，私有与受保护的修饰符"></a>公共，私有与受保护的修饰符</h2><h3 id="默认为-public"><a href="#默认为-public" class="headerlink" title="默认为 public"></a>默认为 <code>public</code></h3><p>在上面的例子里，我们可以自由的访问程序里定义的成员。如果你对其他语言中的类比较了解，就会注意到我们之前的代码里没有使用<code>public</code>来做修饰；在TypeScript里，成员都默认为<code>public</code>。<br>你也可以明确的将一个成员标记成<code>public</code>。我们可以用下面的方式来重写上面的<code>Animal</code>类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">  public name: string;</span><br><span class="line">  public constructor (theName: string) &#123; this.name = theName; &#125;</span><br><span class="line">  public move(distanceInMeters: number) &#123;</span><br><span class="line">    console.log(`$&#123;this.name&#125; moved $&#123;distanceInMeters&#125;m`);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="理解private"><a href="#理解private" class="headerlink" title="理解private"></a>理解<code>private</code></h3><p>当成员被标记成<code>private</code>时，它就不能在声明它的类的外部访问。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">  private name: string;</span><br><span class="line">  constructor(theName: string) &#123; this.name = theName ;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">new Animal(&quot;cat&quot;).name; // 错误的 name 是私有的</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>TypeScript 使用的是结构性类型系统。当我们比较两种不同的类型时，并不在乎它们从何处而来，如果所有成员的类型都是兼容的，我们就认为它们的类型是兼容的。<br>然而，当我们比较带有<code>private</code>或<code>protected</code>成员的类型的时候，情况就不同了。如果其中一个类型里包含一个<code>private</code>成员，那么只有当另外一个类型中也存在这样一个<code>private</code>成员，并且它们都是来自同一处声明时，我们才认为这两个类型是兼容的。对于<code>protected</code>成员也使用这个规则.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">  private name: string;</span><br><span class="line">  constructor(theName: string) &#123;</span><br><span class="line">    this.name = theName;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Rhino extends Animal &#123;</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    super(&quot;Rhino&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Employee &#123;</span><br><span class="line">  private name: string;</span><br><span class="line">  constructor(theName: string) &#123;</span><br><span class="line">    this.name = theName;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let animal = new Animal(&quot;Goat&quot;);</span><br><span class="line">let rhino = new Rhino();</span><br><span class="line">let employee = new Employee(&quot;Bob&quot;);</span><br><span class="line"></span><br><span class="line">animal = rhino;</span><br><span class="line">animal = employee; //错误：Animal 和 Employee 不兼容</span><br></pre></td></tr></table></figure>
+<h3 id="理解protected"><a href="#理解protected" class="headerlink" title="理解protected"></a>理解<code>protected</code></h3><p><code>protected</code>修饰符与<code>private</code>修饰符的行为很相似，但有一点不同，<code>protected</code>成员在派生类中仍然可以访问。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class Person &#123;</span><br><span class="line">  protected name: string;</span><br><span class="line">  constructor(name: string) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Employee extends Person &#123;</span><br><span class="line">  private department: string;</span><br><span class="line">  constructor(name: string, department: string) &#123;</span><br><span class="line">    super(name)</span><br><span class="line">    this.department = department;</span><br><span class="line">  &#125;</span><br><span class="line">  public getElevatorPitch() &#123;</span><br><span class="line">    return `Hello , my name is $&#123;this.name&#125; and I work in $&#123;this.department&#125;.`;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let howard = new Employee(&#x27;Howard&#x27;,&#x27;Sales&#x27;);</span><br><span class="line">console.log(howard.getElevatorPitch());</span><br><span class="line">console.log(howard.name); //错误</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/01/21/typescript-day04/" data-id="cljfboj3d000d8cb66kquchyj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-typescript-day03" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2022/01/18/typescript-day03/" class="article-date">
@@ -153,7 +435,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/18/typescript-day03/" data-id="ckymdg9lh0002c0t651z29rby" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/18/typescript-day03/" data-id="cljfboj3b000a8cb682bw9bbh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -205,7 +487,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/18/typescript-day02/" data-id="ckymdg9lg0001c0t63bjney0g" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/18/typescript-day02/" data-id="cljfboj3a00098cb6b93q5rmg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -278,7 +560,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/18/typescript-day01/" data-id="ckymdg9lc0000c0t62hlb3uvn" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/18/typescript-day01/" data-id="cljfboj3900088cb67w73bfh4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -371,7 +653,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/17/flex/" data-id="ckyiecs9l0000r8t6bbb30gt9" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/17/flex/" data-id="cljfboj3300018cb63bu49gs6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -444,7 +726,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/14/event-loop/" data-id="ckye5egju0000ekt67gyg0gvw" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/14/event-loop/" data-id="cljfboj3d000e8cb67pmmfixr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -493,7 +775,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/01/14/hello-world/" data-id="ckye4d3wl0000qwt68xks5o4m" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/01/14/hello-world/" data-id="cljfboj3600038cb67gz3ayqz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -513,15 +795,29 @@
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/html/" style="font-size: 10px;">html</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a></li></ul>
     </div>
   </div>
 
@@ -534,23 +830,23 @@
       <ul>
         
           <li>
+            <a href="/2022/03/15/nodejs-study-day1/">nodejs_study_day1</a>
+          </li>
+        
+          <li>
+            <a href="/2022/02/17/interview-01/">interview_01</a>
+          </li>
+        
+          <li>
+            <a href="/2022/02/10/2022web%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95%E9%A2%9801/">2022web前端面试题01</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/21/typescript-day04/">typescript-day04</a>
+          </li>
+        
+          <li>
             <a href="/2022/01/18/typescript-day03/">typescript-day03</a>
-          </li>
-        
-          <li>
-            <a href="/2022/01/18/typescript-day02/">typescript-day02</a>
-          </li>
-        
-          <li>
-            <a href="/2022/01/18/typescript-day01/">typescript-day01</a>
-          </li>
-        
-          <li>
-            <a href="/2022/01/17/flex/">Flex 布局是什么？</a>
-          </li>
-        
-          <li>
-            <a href="/2022/01/14/event-loop/">深入：微任务与JavaScript 运行时环境</a>
           </li>
         
       </ul>
@@ -565,7 +861,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2022 zzw<br>
+      &copy; 2023 zzw<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
